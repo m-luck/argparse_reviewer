@@ -1,14 +1,61 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
+\usepackage{pythonhighlight}
+\usepackage{listings}
+\usepackage{minted}
 
-\title{Argparser}
-\author{mll469 }
+\title{Argparse}
+\author{MJ Lukiman}
 \date{July 2019}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
+\section{Motivation}
+
+Instead of using \mintinline{python}{sys.argv}, which is admittedly very simple, I've seen many programs using \mintinline{python}{argparse}. I think it would behoove me to learn it.
+
+\section{Advantages over sys.argv}
+Argparse automatically generates user help errors, and can constrain the type of input the program ingests.
+
+\section{The steps in every file}
+
+While sys.argv can be written in one line, argparse takes a couple more lines of setup. But, I assume that this ends up saving time in the long run.\\
+First, we create the parser object with the description of the program.
+\begin{python}
+import argparse as ap
+p = ap.ArgumentParser(description='Make some meaningful arguments')
+\end{python}
+Then we add arguments in anticipation of calling \mintinline{python}{p.parse_args()}. We add arguments like so:
+\begin{python}
+parse.add_argument('TEXT_OF_ARGUMENT', dest='CUSTOM_ATTRIBUTE_NAME', const='ACTIVE_VALUE', default='OTHERWISE_VALUE', type=TYPE_CONVERSION, choices=TYPE_CONSTRAINTS, nargs=AUTOMATON, required=REQUIRED_BOOL, help='HELP_DESCRIPTION')
+\end{python}
+Now, we can call \mintinline{python}{ap.parse_args()} to automatically process the inputs given to the script. For testing purposes we can simulate inputs via a list of argument strings a la:
+\begin{python}
+ap.parse_args(['arg1','arg2',...]
+\end{python}
+Presence and absence or inverse of arguments can be indicated using \begin{python}
+action='store_true.
+\end{python}
+Several short options can be joined together, using only a single - prefix, as long as only the last option (or none of them) requires a value:
+
+\begin{python}
+>>> parser = argparse.ArgumentParser(prog='PROG')
+>>> parser.add_argument('-x', action='store_true')
+>>> parser.add_argument('-y', action='store_true')
+>>> parser.add_argument('-z')
+>>> parser.parse_args(['-xyzZ'])
+Namespace(x=True, y=True, z='Z')
+\end{python}
+\section{Accessing the namespace}
+\mintinline{python}{ap.parse_args()} would return an object whose properties can be accessed. It can also be turned into a dictionary like:
+\begin{python}
+args = ap.parse_args()
+\end{python}
+To add to an already existing object, just define the name space in:
+\begin{python}
+ap.parse_args(namespace=OBJECT)
+\end{python}
 
 \end{document}
